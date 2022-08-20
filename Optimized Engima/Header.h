@@ -14,9 +14,11 @@ using namespace std;
 class SwitchBoard
 {
 private:
-    map<char, char> letters;
-    fstream switchStream;
+    map<char, char> letters; //A map containing the mapping of the switchboard
+    fstream switchStream; //fstream for reading and writing to the file for saving the state of the switchboard
+
     void populateMap();
+    bool isLetter(char& letter);
 public:
     SwitchBoard(string filePath);
     ~SwitchBoard();

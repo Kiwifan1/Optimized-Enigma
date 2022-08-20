@@ -17,13 +17,14 @@ int main(void)
             "Would you like to switch any letters? [Y] [N]:  ";
         cin >> userResponse;
 
-        if (userResponse.compare("Y"))
+        if (userResponse == "Y" )
         {
-            //SwitchBoard* switchBoardPtr = new SwitchBoard(switchBoardFilePath);
+            SwitchBoard* switchBoardPtr = new SwitchBoard(switchBoardFilePath);
+            switchBoardPtr->switchLetters('a', 'B');
         }
         else
         {
-
+            cout << "Goodbye!";
         }
     }
 
