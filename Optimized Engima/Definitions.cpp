@@ -4,12 +4,27 @@
 //GLOBAL
 
 
+/**
+ * This function opens a file and returns true if the file is open.
+ * 
+ * @param stream The file stream object to open the file with.
+ * @param filePath The path to the file you want to open.
+ * 
+ * @return A boolean value.
+ */
 bool openFile(fstream& stream, string filePath)
 {
 	stream.open(filePath);
 	return stream.is_open();
 }
 
+/**
+ * It takes a file stream and returns a vector of Disk objects
+ * 
+ * @param stream the file stream
+ * 
+ * @return A vector of Disk objects.
+ */
 vector<Disk> getWheelSetups(fstream& stream)
 {
     vector<Disk> wheelTexts;
@@ -26,6 +41,7 @@ vector<Disk> getWheelSetups(fstream& stream)
             if (disk.innerText == "") disk.innerText = temp;
             else if (disk.outerText == "") disk.outerText = temp;
 
+            /* Checking if the innerText and outerText are empty. */
             if (disk.innerText != "" && disk.outerText != "")
             {
                 wheelTexts.push_back(disk);
@@ -36,6 +52,11 @@ vector<Disk> getWheelSetups(fstream& stream)
     return wheelTexts;
 }
 
+/**
+ * It prints out the possible wheels for each disk
+ * 
+ * @param disks vector of Disk objects
+ */
 void showPossibleWheels(vector<Disk> disks)
 {
     for (int i = 0; i < disks.size(); i++)
@@ -51,6 +72,11 @@ void showPossibleWheels(vector<Disk> disks)
     }
 }
 
+/**
+ * It prints out the inner and outer text of the disk, showing the setup
+ * 
+ * @param disk The disk object that is being displayed.
+ */
 void showWheelSetup(Disk disk)
 {
     cout << disk.innerText << endl;
@@ -88,6 +114,12 @@ SwitchBoard::~SwitchBoard()
     letters.clear();
 }
 
+/**
+ * It reads in a string of keys and a string of values from a file, converts them to vectors, and then
+ * populates a map with the keys and values
+ * 
+ * @return a map of char to char.
+ */
 void SwitchBoard::populateMap()
 {
     string keys;
@@ -115,11 +147,15 @@ void SwitchBoard::populateMap()
     switchStream.seekg(0, switchStream.beg); //resets the stream to the beginning of the file
 }
 
+/**
+ * It takes a map of char to char, and prints out the keys and values in two columns
+ */
 void SwitchBoard::showMap()
 {
     vector<char> values;
     if (!letters.empty())
     {
+        // Iterating through the map
         for (auto& [k, v] : letters)
         {
             cout << k << " ";
@@ -139,6 +175,15 @@ void SwitchBoard::showMap()
 }
 
 
+/**
+ * It takes two characters as arguments, checks if they are letters, and if they are, it switches their
+ * positions in the map
+ * 
+ * @param let1 The first letter to switch
+ * @param let2 the second letter to be switched with let1
+ * 
+ * @return a boolean value.
+ */
 bool SwitchBoard::switchLetters(char let1, char let2)
 {
     try
@@ -158,6 +203,13 @@ bool SwitchBoard::switchLetters(char let1, char let2)
     }
 }
 
+/**
+ * It checks if the character is a letter, converts it to uppercase if lowercase
+ * 
+ * @param letter The letter to be checked
+ * 
+ * @return a boolean value of successful letter checking
+ */
 bool SwitchBoard::isLetter(char& letter)
 {
     if (letter >= 65 && letter <= 90)
@@ -172,6 +224,9 @@ bool SwitchBoard::isLetter(char& letter)
     return false;
 }
 
+/**
+ * It loops through the map and sets the value of each key to the key itself *resetting* it
+ */
 void SwitchBoard::resetMap()
 {
     for (auto& [k, v] : letters)
@@ -198,12 +253,17 @@ Rotor::~Rotor()
     
 }
 
+/**
+ * Rotates each disk to the right by one position (clockwise)
+ * 
+ */
 void Rotor::rotateWheelC()
 {
     
     // Inner Letters
     char temp = disk.innerText[disk.innerText.size() - 1];
 
+    //Rotating the innerText of the disk.
     for (int i = disk.innerText.length() - 1; i > 0; i--)
     {
         disk.innerText[i] = disk.innerText[i - 1];
@@ -213,6 +273,7 @@ void Rotor::rotateWheelC()
     // Outer Letters
 
     temp = disk.outerText[disk.outerText.size() - 1];
+    //Rotating the outerText of the disk.
     for (int i = disk.outerText.length() - 1; i > 0; i--)
     {
         disk.outerText[i] = disk.outerText[i - 1];
@@ -229,11 +290,16 @@ void Rotor::rotateWheelC()
     }
 }
 
+/**
+ * Rotates each disk to the left by one position (counter clockwise)
+ * 
+ */
 void Rotor::rotateWheelCC()
 {
     // Inner Letters
     char temp = disk.innerText[0];
 
+    //Rotating the innerText of the disk.
     for (int i = 0; i < disk.innerText.size() - 1; i++)
     {
         disk.innerText[i] = disk.innerText[i + 1];
@@ -243,6 +309,7 @@ void Rotor::rotateWheelCC()
     // Outer Letters
 
     temp = disk.outerText[0];
+    //Rotating the outerText of the disk.
     for (int i = 0; i < disk.outerText.size() - 1; i++) 
     {
         disk.outerText[i] = disk.outerText[i + 1];
@@ -277,6 +344,10 @@ Cog::~Cog()
     delete& reflector;
 }
 
+/**
+ * The function rotates the left rotor, and if the left rotor's position is 25 (rotated fully), it rotates the middle
+ * rotor, and if the middle rotor's position is 25 (rotated fully), it rotates the right rotor
+ */
 void Cog::rotateCog()
 {
     leftRotor.rotateWheelC();
